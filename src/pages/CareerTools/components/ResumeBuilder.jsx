@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Save, Download, RefreshCw, PlusCircle, Trash2, Send } from 'lucide-react';
+import { ArrowLeft, /* Save, */  /* Download, */  RefreshCw, PlusCircle, Trash2, Send } from 'lucide-react';
 
 const ResumeBuilder = () => {
   const [formData, setFormData] = useState({

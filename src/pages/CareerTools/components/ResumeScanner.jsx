@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
   ArrowLeft, Upload, RefreshCw, CheckCircle2, XCircle, 
-  AlertTriangle, FileText, Download, Search 
+  AlertTriangle, FileText, /* Download, */  Search 
 } from 'lucide-react';
 
 const ResumeScanner = () => {

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Search, RefreshCw, CheckCircle, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Search, RefreshCw, /* CheckCircle, */  AlertCircle } from 'lucide-react';
 
 const LinkedInOptimizer = () => {
   const [linkedInUrl, setLinkedInUrl] = useState('');
   const [profileData, setProfileData] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [sections, setSections] = useState({
+  const [/* sections, */ /* setSections */ ] = useState({
     headline: { score: 0, suggestions: [] },
     summary: { score: 0, suggestions: [] },
     experience: { score: 0, suggestions: [] },
