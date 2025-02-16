@@ -51,7 +51,7 @@ const CoverLetterGenerator = () => {
 
   const generateCoverLetter = async () => {
     setIsGenerating(true);
-    // Future GPT integration will go here
+    // Simulated AI call
     setTimeout(() => {
       setGeneratedLetter(`Dear ${formData.hiringManager || 'Hiring Manager'},
 

@@ -4,8 +4,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 const CopilotChat = () => {
   const [showIntro, setShowIntro] = useState(true);
   const [showChat, setShowChat] = useState(false);
-  const copilotUrl =
-    "https://copilotstudio.microsoft.com/environments/Default-a1bbe8af-2736-4afa-b45e-385e122031a2/bots/cr0d9_credolay/canvas?__version__=2&enableFileAttachment=true";
 
   useEffect(() => {
     const introTimer = setTimeout(() => {
@@ -18,8 +16,8 @@ const CopilotChat = () => {
 
   const introAnimation = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.8,
@@ -34,6 +32,30 @@ const CopilotChat = () => {
       }
     }
   };
+
+  // Updated features: 2 original + 2 new prompts
+  const features = [
+    {
+      icon: "🎯",
+      title: "Smart Job Matching",
+      description: "Discover job opportunities that perfectly align with your unique skills and ambitions."
+    },
+    {
+      icon: "💡",
+      title: "Career Insights",
+      description: "Dive into detailed role insights and industry trends to guide your career path."
+    },
+    {
+      icon: "💬",
+      title: "Prompt Example: Job Search",
+      description: "Help me find Customer Service jobs in the health sector in Lagos."
+    },
+    {
+      icon: "📝",
+      title: "Prompt Example: Interview Prep",
+      description: "Please give me typical interview questions for a software developer position."
+    }
+  ];
 
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-blue-900 via-blue-800 to-blue-900">
@@ -103,32 +125,13 @@ const CopilotChat = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12"
+              className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12"
             >
-              {[
-                {
-                  icon: "🎯",
-                  title: "Smart Job Matching",
-                  description:
-                    "Discover job opportunities that perfectly align with your unique skills and ambitions."
-                },
-                {
-                  icon: "💡",
-                  title: "Career Insights",
-                  description:
-                    "Dive into detailed role insights and industry trends to guide your career path."
-                },
-                {
-                  icon: "🤖",
-                  title: "Copilot Chat",
-                  description:
-                    "Engage with our AI for personalized career advice, resume tips, interview strategies, and more."
-                }
-              ].map((feature, index) => (
+              {features.map((feature, index) => (
                 <motion.div
                   key={index}
                   whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.15)" }}
-                  className="p-8 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl"
+                  className="p-6 rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 shadow-xl"
                 >
                   <div className="text-4xl mb-4">{feature.icon}</div>
                   <h3 className="text-2xl font-bold text-white mb-3">{feature.title}</h3>
@@ -137,7 +140,7 @@ const CopilotChat = () => {
               ))}
             </motion.div>
 
-            {/* Chat Interface */}
+            {/* Embedded Copilot iframe */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -156,15 +159,16 @@ const CopilotChat = () => {
                     </div>
                   </div>
                 </div>
-                
-                {/* Chat iframe */}
-                <div className="h-[calc(60vh)] bg-white relative">
+
+                {/* Iframe */}
+                <div className="h-[60vh] bg-white relative">
                   <div className="absolute top-0 left-0 right-0 h-6 bg-gradient-to-r from-blue-600 to-purple-600 z-40" />
                   <iframe
-                    src={copilotUrl}
-                    title="Microsoft Copilot Chat"
-                    className="w-full h-full border-0 -mt-20"
+                    src="https://copilotstudio.microsoft.com/environments/Default-a1bbe8af-2736-4afa-b45e-385e122031a2/bots/cr0d9_credolay/webchat?__version__=2"
+                    frameBorder="0"
+                    style={{ width: '100%', height: '100%' }}
                     allow="microphone; camera"
+                    title="Copilot Chat"
                   />
                 </div>
               </div>
