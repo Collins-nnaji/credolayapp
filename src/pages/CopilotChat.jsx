@@ -34,8 +34,33 @@ const CopilotChat = () => {
   // Copied statuses: { [tipIndex]: { [promptIndex]: true/false } }
   const [copiedStatuses, setCopiedStatuses] = useState({});
 
+  // Mobile detection state
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
   // ----------------------------------------
-  // 2. Data
+  // 2. Set CSS variable for viewport height (for mobile keyboard fix)
+  // ----------------------------------------
+  useEffect(() => {
+    const setVh = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+    setVh();
+    window.addEventListener('resize', setVh);
+    return () => window.removeEventListener('resize', setVh);
+  }, []);
+
+  // Update mobile state on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // ----------------------------------------
+  // 3. Data
   // ----------------------------------------
   const features = [
     {
@@ -89,7 +114,7 @@ const CopilotChat = () => {
   ];
 
   // ----------------------------------------
-  // 3. Intro Timing (2 seconds)
+  // 4. Intro Timing (2 seconds)
   // ----------------------------------------
   useEffect(() => {
     if (!showCountrySelection) {
@@ -98,19 +123,16 @@ const CopilotChat = () => {
         setShowIntro(false);
         setShowChat(true);
       }, 2000);
-
       return () => clearTimeout(introTimer);
     }
   }, [showCountrySelection]);
 
   // ----------------------------------------
-  // 4. Handlers
+  // 5. Handlers
   // ----------------------------------------
   const handleCopyPrompt = async (text, promptIndex) => {
     try {
       await navigator.clipboard.writeText(text);
-
-      // Mark this prompt as copied
       setCopiedStatuses((prev) => ({
         ...prev,
         [currentTip]: {
@@ -118,8 +140,6 @@ const CopilotChat = () => {
           [promptIndex]: true,
         },
       }));
-
-      // Show a brief global notification
       showNotificationMessage("Prompt copied to clipboard!");
     } catch (error) {
       showNotificationMessage("Failed to copy prompt");
@@ -129,12 +149,9 @@ const CopilotChat = () => {
   const showNotificationMessage = (message) => {
     setNotificationMessage(message);
     setShowNotification(true);
-
-    // Hide after 2 seconds
     setTimeout(() => setShowNotification(false), 2000);
   };
 
-  // Open tutorial fresh
   const openTutorialFresh = () => {
     setCopiedStatuses({});
     setCurrentTip(0); 
@@ -142,11 +159,10 @@ const CopilotChat = () => {
   };
 
   // ----------------------------------------
-  // 5. Components
+  // 6. Components
   // ----------------------------------------
   const Notification = () => {
     if (!showNotification) return null;
-
     return (
       <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 flex items-center space-x-2">
         <CheckCircle className="w-5 h-5" />
@@ -155,19 +171,12 @@ const CopilotChat = () => {
     );
   };
 
-  /**
-   * Tutorial Overlay
-   * - Shows promptTips with "Click to copy" or "Copied!" indicator
-   */
   const TutorialOverlay = () => {
     if (!showTutorial) return null;
-
     const tipData = promptTips[currentTip];
-
     const goToPrevious = () => {
       setCurrentTip((prev) => (prev === 0 ? promptTips.length - 1 : prev - 1));
     };
-
     const goToNext = () => {
       if (currentTip === promptTips.length - 1) {
         setShowTutorial(false);
@@ -175,11 +184,9 @@ const CopilotChat = () => {
         setCurrentTip((prev) => prev + 1);
       }
     };
-
     return (
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
         <div className="bg-white rounded-xl p-6 max-w-2xl mx-4 shadow-2xl w-full">
-          {/* Header */}
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center space-x-3">
               {tipData.icon}
@@ -192,13 +199,10 @@ const CopilotChat = () => {
               <X className="w-6 h-6" />
             </button>
           </div>
-
-          {/* Prompt examples */}
           <p className="text-gray-600 text-lg mb-2">Try these example prompts:</p>
           <div className="space-y-3">
             {tipData.examples.map((example, index) => {
               const isCopied = copiedStatuses[currentTip]?.[index] === true;
-
               return (
                 <div
                   key={index}
@@ -220,8 +224,6 @@ const CopilotChat = () => {
               );
             })}
           </div>
-
-          {/* Footer nav */}
           <div className="mt-6 flex justify-between items-center">
             <button
               onClick={goToPrevious}
@@ -253,12 +255,8 @@ const CopilotChat = () => {
     );
   };
 
-  /**
-   * Country Selection Overlay
-   */
   const CountrySelectionOverlay = () => {
     if (!showCountrySelection) return null;
-
     const countries = [
       {
         name: 'Nigeria',
@@ -271,12 +269,10 @@ const CopilotChat = () => {
         gradient: 'from-blue-700 via-blue-500 to-blue-400',
       },
     ];
-
     const handleCountryClick = (country) => {
       setSelectedCountry(country);
       setShowCountrySelection(false);
     };
-
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
         <div className="relative bg-white/30 backdrop-blur-xl rounded-3xl shadow-2xl p-8 max-w-3xl w-full">
@@ -313,7 +309,7 @@ const CopilotChat = () => {
   };
 
   // ----------------------------------------
-  // 6. Main Render
+  // 7. Main Render
   // ----------------------------------------
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-blue-900 via-blue-800 to-blue-900">
@@ -330,14 +326,11 @@ const CopilotChat = () => {
           <source src="/credolay2.mp4" type="video/mp4" />
         </video>
       </div>
-
       {/* Overlays */}
       <CountrySelectionOverlay />
-
       {/* Intro screen */}
       {showIntro && !showCountrySelection && (
         <div className="relative z-20 h-screen flex flex-col items-center justify-center px-4">
-          {/* Credolay Logo */}
           <div className="mb-8">
             <img 
               src="/credolay.png" 
@@ -345,7 +338,6 @@ const CopilotChat = () => {
               className="h-48 md:h-64 w-auto brightness-110 filter drop-shadow-2xl"
             />
           </div>
-          {/* Intro Text */}
           <div className="text-3xl md:text-4xl text-gray-200 text-center max-w-4xl leading-relaxed">
             Your AI-Powered Career Partner
           </div>
@@ -354,17 +346,14 @@ const CopilotChat = () => {
           </div>
         </div>
       )}
-
       {/* Main chat + features */}
       {showChat && !showCountrySelection && (
         <div className="relative z-20 w-full md:container md:mx-auto md:px-4 pb-8 md:pb-0">
-          {/* Feature cards (hidden on very small screens) */}
           <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
             {features.map((feature, index) => (
               <div
                 key={index}
-                className={`p-6 rounded-2xl backdrop-blur-lg border border-white/10 shadow-xl 
-                  bg-gradient-to-br ${feature.gradient}`}
+                className={`p-6 rounded-2xl backdrop-blur-lg border border-white/10 shadow-xl bg-gradient-to-br ${feature.gradient}`}
               >
                 <div className="bg-white/10 rounded-full w-16 h-16 flex items-center justify-center mb-4">
                   {feature.icon}
@@ -374,25 +363,21 @@ const CopilotChat = () => {
               </div>
             ))}
           </div>
-
           {/* Chat window:
-              - On mobile, it is fixed with a height of 70vh and moved up using bottom-10.
-              - On desktop, it is static with a height of 55vh.
+                - On mobile: fixed with bottom-10 and a height defined by the CSS variable (70% of initial viewport height)
+                - On desktop: static with a height of 55vh
           */}
           <div 
-            className="fixed bottom-10 left-0 right-0 h-[70vh] w-full z-20 md:static md:inset-auto md:rounded-3xl md:shadow-2xl md:h-[55vh]"
+            className="fixed bottom-10 left-0 right-0 w-full z-20 md:static md:inset-auto md:rounded-3xl md:shadow-2xl md:h-[55vh]"
+            style={isMobile ? { height: 'calc(var(--vh, 1vh) * 70)' } : {}}
           >
             <div className="relative w-full h-full">
-              {/* Header */}
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-2xl font-bold text-white">Credolay Assistant</h2>
-                    <p className="text-blue-100">
-                      Your AI-powered guide to career success
-                    </p>
+                    <p className="text-blue-100">Your AI-powered guide to career success</p>
                   </div>
-                  {/* Help icon triggers the tutorial */}
                   <button
                     className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                     onClick={openTutorialFresh}
@@ -401,8 +386,6 @@ const CopilotChat = () => {
                   </button>
                 </div>
               </div>
-
-              {/* Iframe chat (appending country param) */}
               <div className="w-full h-[calc(100%-4rem)] bg-white">
                 <iframe
                   src={`https://copilotstudio.microsoft.com/environments/Default-a1bbe8af-2736-4afa-b45e-385e122031a2/bots/cr0d9_credolay/webchat?__version__=2&country=${encodeURIComponent(selectedCountry)}`}
@@ -416,11 +399,7 @@ const CopilotChat = () => {
           </div>
         </div>
       )}
-
-      {/* Tutorial Overlay */}
       <TutorialOverlay />
-
-      {/* Notification */}
       <Notification />
     </div>
   );
