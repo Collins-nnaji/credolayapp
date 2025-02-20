@@ -114,9 +114,7 @@ const CopilotChat = () => {
       setCopiedStatuses((prev) => ({
         ...prev,
         [currentTip]: {
-          // Keep existing statuses for this tip
           ...(prev[currentTip] || {}),
-          // Mark the current prompt index as true
           [promptIndex]: true,
         },
       }));
@@ -136,6 +134,13 @@ const CopilotChat = () => {
     setTimeout(() => setShowNotification(false), 2000);
   };
 
+  // Open tutorial fresh
+  const openTutorialFresh = () => {
+    setCopiedStatuses({});
+    setCurrentTip(0); 
+    setShowTutorial(true);
+  };
+
   // ----------------------------------------
   // 5. Components
   // ----------------------------------------
@@ -146,34 +151,6 @@ const CopilotChat = () => {
       <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 flex items-center space-x-2">
         <CheckCircle className="w-5 h-5" />
         <span>{notificationMessage}</span>
-      </div>
-    );
-  };
-
-  /**
-   * This function is called when user clicks "Example Prompts"
-   * - Resets prompt statuses (so all show "Click to copy")
-   * - Optionally sets tip to 0 (if you want them to start from the first tip always)
-   * - Opens the overlay
-   */
-  const openTutorialFresh = () => {
-    setCopiedStatuses({});
-    setCurrentTip(0); 
-    setShowTutorial(true);
-  };
-
-  const Toolbar = () => {
-    if (!showChat || showCountrySelection) return null;
-
-    return (
-      <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-lg z-40 flex items-center space-x-6">
-        <button
-          className="text-gray-600 hover:text-blue-600 transition-colors flex items-center space-x-2"
-          onClick={openTutorialFresh}
-        >
-          <HelpCircle className="w-6 h-6" />
-          <span className="text-sm">Example Prompts</span>
-        </button>
       </div>
     );
   };
@@ -220,8 +197,7 @@ const CopilotChat = () => {
           <p className="text-gray-600 text-lg mb-2">Try these example prompts:</p>
           <div className="space-y-3">
             {tipData.examples.map((example, index) => {
-              const isCopied =
-                copiedStatuses[currentTip]?.[index] === true;
+              const isCopied = copiedStatuses[currentTip]?.[index] === true;
 
               return (
                 <div
@@ -231,7 +207,6 @@ const CopilotChat = () => {
                 >
                   <div className="flex items-center justify-between">
                     <span>{example}</span>
-                    {/* Show "Copied!" with a check icon if already copied */}
                     {isCopied ? (
                       <span className="inline-flex items-center space-x-1 text-sm text-green-600">
                         <CheckCircle className="w-4 h-4" />
@@ -382,9 +357,9 @@ const CopilotChat = () => {
 
       {/* Main chat + features */}
       {showChat && !showCountrySelection && (
-        <div className="relative z-20 container mx-auto px-4 pt-24 pb-8">
-          {/* Feature cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="relative z-20 w-full md:container md:mx-auto md:px-4 pb-8 md:pb-0">
+          {/* Feature cards (hidden on very small screens) */}
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
             {features.map((feature, index) => (
               <div
                 key={index}
@@ -400,9 +375,14 @@ const CopilotChat = () => {
             ))}
           </div>
 
-          {/* Chat window */}
-          <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
-            <div className="relative">
+          {/* Chat window:
+              - On mobile, it is fixed at the bottom with a height of 70vh.
+              - On desktop, it is static with a reduced height of 55vh.
+          */}
+          <div 
+            className="fixed bottom-0 left-0 right-0 h-[70vh] w-full z-20 md:static md:inset-auto md:rounded-3xl md:shadow-2xl md:h-[55vh]"
+          >
+            <div className="relative w-full h-full">
               {/* Header */}
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4">
                 <div className="flex items-center justify-between">
@@ -412,6 +392,7 @@ const CopilotChat = () => {
                       Your AI-powered guide to career success
                     </p>
                   </div>
+                  {/* Help icon triggers the tutorial */}
                   <button
                     className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                     onClick={openTutorialFresh}
@@ -421,8 +402,8 @@ const CopilotChat = () => {
                 </div>
               </div>
 
-              {/* Iframe chat (append country param) */}
-              <div className="h-[70vh] bg-white">
+              {/* Iframe chat (appending country param) */}
+              <div className="w-full h-[calc(100%-4rem)] bg-white">
                 <iframe
                   src={`https://copilotstudio.microsoft.com/environments/Default-a1bbe8af-2736-4afa-b45e-385e122031a2/bots/cr0d9_credolay/webchat?__version__=2&country=${encodeURIComponent(selectedCountry)}`}
                   className="w-full h-full"
@@ -441,9 +422,6 @@ const CopilotChat = () => {
 
       {/* Notification */}
       <Notification />
-
-      {/* Bottom Toolbar */}
-      <Toolbar />
     </div>
   );
 };
