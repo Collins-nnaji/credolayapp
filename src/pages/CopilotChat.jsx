@@ -376,11 +376,11 @@ const CopilotChat = () => {
           </div>
 
           {/* Chat window:
-              - On mobile, it is fixed at the bottom with a height of 70vh.
-              - On desktop, it is static with a reduced height of 55vh.
+              - On mobile, it is fixed with a height of 70vh and moved up using bottom-10.
+              - On desktop, it is static with a height of 55vh.
           */}
           <div 
-            className="fixed bottom-0 left-0 right-0 h-[70vh] w-full z-20 md:static md:inset-auto md:rounded-3xl md:shadow-2xl md:h-[55vh]"
+            className="fixed bottom-10 left-0 right-0 h-[70vh] w-full z-20 md:static md:inset-auto md:rounded-3xl md:shadow-2xl md:h-[55vh]"
           >
             <div className="relative w-full h-full">
               {/* Header */}
