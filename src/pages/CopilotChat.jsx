@@ -31,23 +31,48 @@ const CopilotChat = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState('');
 
-  // Copied statuses: { [tipIndex]: { [promptIndex]: true/false } }
+  // Copied statuses
   const [copiedStatuses, setCopiedStatuses] = useState({});
 
   // Mobile detection state
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   // ----------------------------------------
-  // 2. Set CSS variable for viewport height (for mobile keyboard fix)
+  // 2. Mobile Viewport & Orientation Handling
   // ----------------------------------------
+  // Add meta viewport control for mobile
+  useEffect(() => {
+    // Prevent zooming on mobile devices
+    const metaViewport = document.createElement('meta');
+    metaViewport.name = 'viewport';
+    metaViewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    document.head.appendChild(metaViewport);
+
+    return () => {
+      document.head.removeChild(metaViewport);
+    };
+  }, []);
+
+  // Enhanced viewport height calculation
   useEffect(() => {
     const setVh = () => {
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
     };
+
+    // Initial set
     setVh();
+
+    // Update on resize and orientation change
     window.addEventListener('resize', setVh);
-    return () => window.removeEventListener('resize', setVh);
+    window.addEventListener('orientationchange', () => {
+      setTimeout(setVh, 100);
+    });
+
+    return () => {
+      window.removeEventListener('resize', setVh);
+      window.removeEventListener('orientationchange', setVh);
+    };
   }, []);
 
   // Update mobile state on resize
@@ -114,7 +139,7 @@ const CopilotChat = () => {
   ];
 
   // ----------------------------------------
-  // 4. Intro Timing (2 seconds)
+  // 4. Intro Timing
   // ----------------------------------------
   useEffect(() => {
     if (!showCountrySelection) {
@@ -154,7 +179,7 @@ const CopilotChat = () => {
 
   const openTutorialFresh = () => {
     setCopiedStatuses({});
-    setCurrentTip(0); 
+    setCurrentTip(0);
     setShowTutorial(true);
   };
 
@@ -184,6 +209,7 @@ const CopilotChat = () => {
         setCurrentTip((prev) => prev + 1);
       }
     };
+
     return (
       <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
         <div className="bg-white rounded-xl p-6 max-w-2xl mx-4 shadow-2xl w-full">
@@ -260,7 +286,7 @@ const CopilotChat = () => {
     const countries = [
       {
         name: 'Nigeria',
-        image: '/flags/nigeria.jpg', 
+        image: '/flags/nigeria.jpg',
         gradient: 'from-green-700 via-green-500 to-green-400',
       },
       {
@@ -269,10 +295,12 @@ const CopilotChat = () => {
         gradient: 'from-blue-700 via-blue-500 to-blue-400',
       },
     ];
+
     const handleCountryClick = (country) => {
       setSelectedCountry(country);
       setShowCountrySelection(false);
     };
+
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
         <div className="relative bg-white/30 backdrop-blur-xl rounded-3xl shadow-2xl p-8 max-w-3xl w-full">
@@ -326,8 +354,10 @@ const CopilotChat = () => {
           <source src="/credolay2.mp4" type="video/mp4" />
         </video>
       </div>
+
       {/* Overlays */}
       <CountrySelectionOverlay />
+
       {/* Intro screen */}
       {showIntro && !showCountrySelection && (
         <div className="relative z-20 h-screen flex flex-col items-center justify-center px-4">
@@ -346,9 +376,11 @@ const CopilotChat = () => {
           </div>
         </div>
       )}
+
       {/* Main chat + features */}
       {showChat && !showCountrySelection && (
         <div className="relative z-20 w-full md:container md:mx-auto md:px-4 pb-8 md:pb-0">
+          {/* Features grid (hidden on mobile) */}
           <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
             {features.map((feature, index) => (
               <div
@@ -363,42 +395,52 @@ const CopilotChat = () => {
               </div>
             ))}
           </div>
-          {/* Chat window:
-                - On mobile: fixed with bottom-10 and a height defined by the CSS variable (70% of initial viewport height)
-                - On desktop: static with a height of 55vh
-          */}
+
+          {/* Enhanced Mobile-Optimized Chat Interface */}
           <div 
-            className="fixed bottom-10 left-0 right-0 w-full z-20 md:static md:inset-auto md:rounded-3xl md:shadow-2xl md:h-[55vh]"
-            style={isMobile ? { height: 'calc(var(--vh, 1vh) * 70)' } : {}}
+            className={`
+              ${isMobile ? 'fixed bottom-0 left-0 right-0 w-full z-30' : 'static w-full md:rounded-3xl md:shadow-2xl md:h-[75vh] md:mb-8'}
+              bg-white overflow-hidden
+            `}
+            style={isMobile ? {
+              height: 'calc(var(--vh, 1vh) * 80)',
+              maxHeight: 'calc(var(--vh, 1vh) * 80)'
+            } : {}}
           >
-            <div className="relative w-full h-full">
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className="text-2xl font-bold text-white">Credolay Assistant</h2>
-                    <p className="text-blue-100">Your AI-powered guide to career success</p>
-                  </div>
-                  <button
-                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                    onClick={openTutorialFresh}
-                  >
-                    <HelpCircle className="w-6 h-6 text-white" />
-                  </button>
+            {/* Chat Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 sticky top-0 z-10">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-bold text-white">Credolay Assistant</h2>
+                  <p className="text-sm text-blue-100">Your AI-powered guide to career success</p>
                 </div>
+                <button
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  onClick={openTutorialFresh}
+                >
+                  <HelpCircle className="w-6 h-6 text-white" />
+                </button>
               </div>
-              <div className="w-full h-[calc(100%-4rem)] bg-white">
-                <iframe
-                  src={`https://copilotstudio.microsoft.com/environments/Default-a1bbe8af-2736-4afa-b45e-385e122031a2/bots/cr0d9_credolay/webchat?__version__=2&country=${encodeURIComponent(selectedCountry)}`}
-                  className="w-full h-full"
-                  frameBorder="0"
-                  allow="microphone; camera"
-                  title="Copilot Chat"
-                />
-              </div>
+            </div>
+
+            {/* Chat IFrame Container */}
+            <div className="w-full h-[calc(100%-4rem)] bg-white flex flex-col pb-4">
+              <iframe
+                src={`https://copilotstudio.microsoft.com/environments/Default-a1bbe8af-2736-4afa-b45e-385e122031a2/bots/cr0d9_credolay/webchat?__version__=2&country=${encodeURIComponent(selectedCountry)}`}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="microphone; camera"
+                title="Copilot Chat"
+                style={{ 
+                  minHeight: isMobile ? 'calc(var(--vh, 1vh) * 70)' : '100%',
+                  overflowY: 'hidden'
+                }}
+              />
             </div>
           </div>
         </div>
       )}
+
       <TutorialOverlay />
       <Notification />
     </div>
