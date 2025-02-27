@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { motion} from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   Upload,
   AlertTriangle,
@@ -7,14 +8,21 @@ import {
   Target,
   AlertCircle,
   Loader,
-  Zap
+  Zap,
+  Download,
+  RotateCw,  // Replace Refresh with RotateCw
+  Search
 } from 'lucide-react';
+
+// Backend API URL - adjust as needed
+const API_URL = process.env.REACT_APP_API_URL || 'https://credolaybackend.azurewebsites.net/api';
 
 const ResumeAnalytics = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [activeSection, setActiveSection] = useState('upload');
   const [analysis, setAnalysis] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
+  const [jobRole, setJobRole] = useState('');
 
   const handleFileUpload = (event) => {
     const uploadedFile = event.target.files[0];
@@ -46,59 +54,55 @@ const ResumeAnalytics = () => {
     setIsAnalyzing(true);
     
     try {
-      const reader = new FileReader();
+      // Create form data to send file to backend
+      const formData = new FormData();
+      formData.append('file', uploadedFile);
       
-      reader.onload = async (e) => {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        setAnalysis({
-          atsScore: 65,
-          keywordMatch: 70,
-          formatScore: 85,
-          contentScore: 60,
-          missingKeywords: [
-            "cloud infrastructure",
-            "agile methodologies",
-            "stakeholder management"
-          ],
-          improvements: [
-            {
-              type: "critical",
-              message: "Resume lacks measurable achievements",
-              impact: "High impact on ATS scoring"
-            },
-            {
-              type: "warning",
-              message: "Technical skills section needs standardization",
-              impact: "Medium impact on keyword matching"
-            }
-          ],
-          jobMatches: [
-            {
-              title: "Senior Software Engineer",
-              company: "Tech Corp",
-              matchScore: 85,
-              keywordMatch: 90,
-              missingSkills: ["AWS", "Kubernetes"],
-              salary: "$120k - $150k"
-            }
-          ]
-        });
-        
-        setIsAnalyzing(false);
-        setActiveSection('dashboard');
-      };
-
-      reader.onerror = () => {
-        setErrorMessage('Error reading file');
-        setIsAnalyzing(false);
-      };
-
-      reader.readAsText(uploadedFile);
+      // Add job role if provided
+      if (jobRole) {
+        formData.append('job_role', jobRole);
+      }
+      
+      // Send request to backend
+      const response = await fetch(`${API_URL}/analyze`, {
+        method: 'POST',
+        body: formData,
+      });
+      
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.message || 'Error analyzing resume');
+      }
+      
+      // Set analysis data from backend
+      setAnalysis(result.data);
+      setActiveSection('dashboard');
     } catch (error) {
-      setErrorMessage('Error analyzing resume');
+      console.error('Error:', error);
+      setErrorMessage(error.message || 'Error analyzing resume. Please try again.');
+    } finally {
       setIsAnalyzing(false);
     }
+  };
+
+  const handleRetry = () => {
+    setAnalysis(null);
+    setActiveSection('upload');
+    setErrorMessage('');
+  };
+
+  const getScoreColor = (score) => {
+    if (score >= 80) return 'text-green-600';
+    if (score >= 60) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  // Calculate overall score
+  const calculateOverallScore = () => {
+    if (!analysis) return 0;
+    const { atsScore, keywordMatch, formatScore, contentScore } = analysis;
+    return Math.round((atsScore + keywordMatch + formatScore + contentScore) / 4);
   };
 
   return (
@@ -108,7 +112,7 @@ const ResumeAnalytics = () => {
         <img
           src="/credolay.png"
           alt="Watermark"
-          className="w-[800px] opacity-5"
+          className="w-full max-w-[800px] opacity-5"
         />
       </div>
 
@@ -148,6 +152,25 @@ const ResumeAnalytics = () => {
                   </motion.div>
                 )}
 
+                {/* Job Role Input */}
+                <div className="mb-6">
+                  <div className="flex items-center justify-center">
+                    <div className="relative w-full max-w-md">
+                      <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        placeholder="Enter target job role (optional)"
+                        value={jobRole}
+                        onChange={(e) => setJobRole(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Specifying a job role helps tailor the analysis to your career goals
+                  </p>
+                </div>
+
                 <div className="relative">
                   <label className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer bg-white/50 hover:bg-white/80 transition-colors backdrop-blur-sm">
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -162,7 +185,7 @@ const ResumeAnalytics = () => {
                     <input 
                       type="file" 
                       className="hidden" 
-                      accept=".pdf,.docx,.txt"
+                      accept=".pdf,.docx,.doc,.txt"
                       onChange={handleFileUpload}
                     />
                   </label>
@@ -200,6 +223,85 @@ const ResumeAnalytics = () => {
 
             {activeSection === 'dashboard' && analysis && (
               <div className="space-y-6">
+                {/* Dashboard Header with Overall Score */}
+                <div className="bg-white rounded-xl shadow p-6 mb-6">
+                  <div className="flex flex-col md:flex-row items-center justify-between">
+                    <div>
+                      <h2 className="text-2xl font-bold mb-2">Resume Analysis Results</h2>
+                      <p className="text-gray-600">Here's how your resume performs against industry standards</p>
+                    </div>
+                    <div className="mt-4 md:mt-0 flex items-center space-x-4">
+                    <button 
+  onClick={handleRetry}
+  className="flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 transition-colors"
+>
+  <RotateCw className="w-4 h-4 mr-2" />
+  Analyze Another
+</button>
+                      <div className="flex flex-col items-center">
+                        <div className="text-sm font-medium text-gray-500">Overall Score</div>
+                        <div className={`text-3xl font-bold ${getScoreColor(calculateOverallScore())}`}>
+                          {calculateOverallScore()}%
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Score Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                  {[
+                    { 
+                      title: "ATS Score", 
+                      score: analysis.atsScore, 
+                      icon: <Target className="w-5 h-5" />,
+                      description: "How well your resume performs with Applicant Tracking Systems"
+                    },
+                    { 
+                      title: "Keyword Match", 
+                      score: analysis.keywordMatch, 
+                      icon: <Search className="w-5 h-5" />,
+                      description: "Relevance of your keywords to job requirements"
+                    },
+                    { 
+                      title: "Format", 
+                      score: analysis.formatScore, 
+                      icon: <Download className="w-5 h-5" />,
+                      description: "Structure, readability and professional presentation"
+                    },
+                    { 
+                      title: "Content", 
+                      score: analysis.contentScore, 
+                      icon: <Briefcase className="w-5 h-5" />,
+                      description: "Quality and impact of your resume content"
+                    }
+                  ].map((item, index) => (
+                    <div 
+                      key={index} 
+                      className="bg-white rounded-xl shadow p-6"
+                    >
+                      <div className="flex justify-between items-center mb-4">
+                        <div className="font-medium text-gray-700">{item.title}</div>
+                        <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                          item.score >= 80 ? 'bg-green-100' : 
+                          item.score >= 60 ? 'bg-yellow-100' : 'bg-red-100'
+                        }`}>
+                          {React.cloneElement(item.icon, { 
+                            className: `${
+                              item.score >= 80 ? 'text-green-600' : 
+                              item.score >= 60 ? 'text-yellow-600' : 'text-red-600'
+                            }`
+                          })}
+                        </div>
+                      </div>
+                      <div className={`text-3xl font-bold ${getScoreColor(item.score)}`}>
+                        {item.score}%
+                      </div>
+                      <p className="text-sm text-gray-500 mt-2">{item.description}</p>
+                    </div>
+                  ))}
+                </div>
+
                 {/* Critical Improvements */}
                 <div className="bg-white rounded-xl shadow p-6">
                   <h3 className="text-lg font-semibold mb-4">Critical Improvements</h3>
@@ -243,6 +345,70 @@ const ResumeAnalytics = () => {
                     ))}
                   </div>
                 </div>
+
+                {/* Advanced Metrics (if available) */}
+                {analysis.advancedMetrics && (
+                  <div className="bg-white rounded-xl shadow p-6">
+                    <h3 className="text-lg font-semibold mb-4">Advanced Metrics</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="p-4 bg-gray-50 rounded-lg">
+                        <p className="text-sm text-gray-500">Word Count</p>
+                        <p className="text-xl font-semibold">{analysis.advancedMetrics.word_count}</p>
+                      </div>
+                      <div className="p-4 bg-gray-50 rounded-lg">
+                      <p className="text-sm text-gray-500">Reading Level</p>
+                        <p className="text-xl font-semibold">{analysis.advancedMetrics.reading_level}</p>
+                      </div>
+                      <div className="p-4 bg-gray-50 rounded-lg">
+                        <p className="text-sm text-gray-500">Action Verb Usage</p>
+                        <p className="text-xl font-semibold">
+                          {analysis.advancedMetrics.action_verb_count} 
+                          <span className="text-sm text-gray-500 ml-1">
+                            ({(analysis.advancedMetrics.action_verb_ratio * 100).toFixed(1)}%)
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Resume Sections (if available) */}
+                {analysis.resumeSections && (
+                  <div className="bg-white rounded-xl shadow p-6">
+                    <h3 className="text-lg font-semibold mb-4">Resume Structure</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="text-sm font-medium text-gray-700 mb-2">Detected Sections</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {analysis.resumeSections.detected.map((section, index) => (
+                            <span 
+                              key={index}
+                              className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm"
+                            >
+                              {section.charAt(0).toUpperCase() + section.slice(1)}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {analysis.resumeSections.missing.length > 0 && (
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-700 mb-2">Missing Sections</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {analysis.resumeSections.missing.map((section, index) => (
+                              <span 
+                                key={index}
+                                className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm"
+                              >
+                                {section.charAt(0).toUpperCase() + section.slice(1)}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {/* Job Matches */}
                 <div className="bg-white rounded-xl shadow p-6">
