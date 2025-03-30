@@ -1,150 +1,134 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { MessageSquare, FileSearch, Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
 
+  // Handle scroll for navbar background change
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      setIsScrolled(window.scrollY > 20);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navigationItems = [
-    {
-      path: '/chat',
-      label: 'AI Chat Assistant',
-      icon: <MessageSquare className="w-5 h-5" />,
-      gradient: 'from-blue-600 to-cyan-600'
-    },
-    {
-      path: '/resume-analytics',
-      label: 'Resume Analytics',
-      icon: <FileSearch className="w-5 h-5" />,
-      gradient: 'from-purple-600 to-pink-600'
-    }
+    { href: "/", label: "Home" },
+    { href: "/presentation/1", label: "Product Vision" },
+    { href: "/presentation/2", label: "AI Technology" },
+    { href: "/presentation/3", label: "Analytics Suite" },
+    { href: "/presentation/4", label: "Market Analysis" },
+    { href: "/presentation/5", label: "Growth Strategy" },
   ];
 
-  const NavLink = ({ item }) => {
-    const isActive = location.pathname === item.path;
-
-    return (
-      <Link
-        to={item.path}
-        className="relative group"
-      >
-        <div className={`
-          flex items-center px-4 py-2 rounded-full transition-all duration-300
-          ${isActive ? 'text-white' : 'text-gray-700 hover:text-gray-900'}
-        `}>
-          {/* Background */}
-          <div className={`
-            absolute inset-0 rounded-full transition-all duration-300
-            ${isActive 
-              ? `bg-gradient-to-r ${item.gradient} opacity-100` 
-              : 'opacity-0 group-hover:opacity-10 bg-gray-200'
-            }
-          `} />
-
-          {/* Content */}
-          <div className="relative flex items-center space-x-2">
-            {item.icon}
-            <span className="font-medium">{item.label}</span>
+  const renderDesktopNav = () => (
+    <div className="hidden lg:flex items-center space-x-4">
+      <div className="relative group">
+        <button className="py-2 px-3 text-sm rounded-lg flex items-center gap-1 text-white hover:bg-white/10 transition duration-150">
+          Slides <span className="h-4 w-4 opacity-70">▼</span>
+        </button>
+        <div className="absolute left-0 mt-2 w-56 rounded-xl overflow-hidden shadow-lg bg-gray-800 border border-gray-700 transform scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-200 origin-top-left z-50">
+          <div className="py-2">
+            {navigationItems.slice(1).map((item) => (
+              <Link 
+                key={item.href} 
+                to={item.href}
+                className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition duration-150"
+              >
+                {item.label}
+              </Link>
+            ))}
           </div>
         </div>
+      </div>
+      
+      <Link to="/" className="py-2 px-3 text-sm rounded-lg text-white hover:bg-white/10 transition duration-150">
+        Home
       </Link>
-    );
-  };
+    </div>
+  );
+
+  const renderMobileNav = () => (
+    <div className={`lg:hidden fixed inset-0 bg-gray-900/95 backdrop-blur-sm z-50 transform ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-300 ease-in-out`}>
+      <div className="flex justify-end p-4">
+        <button onClick={() => setIsMobileMenuOpen(false)} className="text-white">
+          <span className="h-6 w-6 block">✕</span>
+        </button>
+      </div>
+      <div className="flex flex-col items-center space-y-4 p-4">
+        {navigationItems.map((item) => (
+          <Link 
+            key={item.href} 
+            to={item.href}
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="py-2 px-4 w-full text-center text-white text-lg font-medium hover:bg-white/10 rounded-lg transition duration-150"
+          >
+            {item.label}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
 
   return (
-    <nav className={`
-      fixed top-0 left-0 right-0 z-50 transition-all duration-300
-      ${isScrolled 
-        ? 'bg-white/80 backdrop-blur-lg shadow-md py-4' 
-        : 'bg-transparent py-6'}
-    `}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <motion.nav 
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        isScrolled 
+          ? 'bg-gray-900/90 backdrop-blur-lg py-3 shadow-lg shadow-black/20' 
+          : 'bg-transparent py-5'
+      }`}
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <Link to="/" className="group">
-  <motion.span
-    className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent tracking-tight"
-    whileHover={{ scale: 1.05 }}
-    transition={{ type: "spring", stiffness: 300 }}
-  >
-    Credolay
-  </motion.span>
-</Link>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
+            <Link to="/" className="flex items-center">
+              <div className="h-8 w-8 relative mr-3">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg animate-float"></div>
+                <div className="absolute inset-1 bg-gray-900 rounded-md"></div>
+                <div className="absolute inset-2 bg-gradient-to-tr from-blue-400 to-purple-500 rounded-sm"></div>
+              </div>
+              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+                Interactive Platform
+              </span>
+            </Link>
+          </motion.div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-2">
-            {navigationItems.map((item) => (
-              <NavLink key={item.path} item={item} />
-            ))}
-
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="ml-4 px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-medium shadow-lg shadow-blue-600/20 hover:shadow-blue-600/30 transition-shadow"
-              onClick={() => {}} // Add auth handling
-            >
-              Sign In
-            </motion.button>
+          {/* Desktop Navigation - Simplified with dropdown for slides */}
+          <div className="hidden lg:flex items-center space-x-1">
+            {renderDesktopNav()}
           </div>
 
           {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
+          <div className="lg:hidden">
+            <motion.button
+              className="text-white p-2 focus:outline-none rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              whileTap={{ scale: 0.95 }}
+            >
+              <span className="sr-only">Open menu</span>
+              {isMobileMenuOpen ? (
+                <span className="block w-6 h-6">✕</span>
+              ) : (
+                <span className="block w-6 h-6">☰</span>
+              )}
+            </motion.button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      <motion.div
-        initial={false}
-        animate={isMobileMenuOpen ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
-        className="md:hidden overflow-hidden bg-white border-t border-gray-100"
-      >
-        <div className="px-4 py-2 space-y-1">
-          {navigationItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`
-                flex items-center space-x-2 px-4 py-3 rounded-lg transition-colors
-                ${location.pathname === item.path 
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' 
-                  : 'text-gray-700 hover:bg-gray-100'}
-              `}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              {item.icon}
-              <span className="font-medium">{item.label}</span>
-            </Link>
-          ))}
-          <button
-            className="w-full mt-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium"
-            onClick={() => {}} // Add auth handling
-          >
-            Sign In
-          </button>
-        </div>
-      </motion.div>
-    </nav>
+      {renderMobileNav()}
+    </motion.nav>
   );
 };
 

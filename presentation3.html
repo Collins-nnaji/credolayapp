@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credolay - Presentation 3</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #1e3a8a, #1e40af, #1e3a8a);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .bg-overlay {
+            background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .feature-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+        }
+        .phone-frame {
+            border-radius: 2rem;
+            border: 8px solid #333;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40%;
+            height: 25px;
+            background-color: #333;
+            border-bottom-left-radius: 1rem;
+            border-bottom-right-radius: 1rem;
+            z-index: 10;
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s;
+            transform-origin: 50% 50%;
+        }
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header fixed top-0 left-0 right-0 z-50 py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="index.html" class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Credolay</a>
+                <nav class="hidden md:flex ml-8">
+                    <a href="presentation1.html" class="text-white/60 hover:text-white mx-2 text-sm">1: Intro</a>
+                    <a href="presentation2.html" class="text-white/60 hover:text-white mx-2 text-sm">2: AI Assistant</a>
+                    <a href="presentation3.html" class="text-white mx-2 text-sm font-medium">3: Resume Analytics</a>
+                    <a href="presentation4.html" class="text-white/60 hover:text-white mx-2 text-sm">4: Market</a>
+                    <a href="presentation5.html" class="text-white/60 hover:text-white mx-2 text-sm">5: Strategy</a>
+                </nav>
+            </div>
+            <div class="text-xl font-semibold text-white/90">Innovation Visa Application</div>
+        </div>
+    </header>
+
+    <div class="relative w-full h-screen p-8 flex flex-col items-center justify-center bg-overlay">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 overflow-hidden opacity-20">
+            <div class="absolute top-10 right-10 w-64 h-64 bg-purple-500 rounded-full filter blur-3xl"></div>
+            <div class="absolute bottom-10 left-10 w-64 h-64 bg-pink-500 rounded-full filter blur-3xl"></div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            <!-- Left Side: Phone Mockup -->
+            <div class="flex justify-center items-center p-4 order-2 md:order-1">
+                <div class="phone-frame w-64 md:w-72 bg-gray-100">
+                    <div class="phone-notch"></div>
+                    <!-- Resume Analytics UI Mockup -->
+                    <div class="h-full bg-gray-50 overflow-hidden">
+                        <!-- App Header -->
+                        <div class="bg-gradient-to-r from-purple-600 to-pink-600 p-4">
+                            <div class="text-lg font-bold text-white">Resume Analytics</div>
+                            <div class="text-sm text-white/80">Optimize your job applications</div>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="p-4 space-y-4 h-96 overflow-y-auto text-gray-800">
+                            <!-- Overall Score -->
+                            <div class="bg-white rounded-xl shadow p-4 flex items-center justify-between">
+                                <div>
+                                    <div class="text-sm text-gray-500">Overall Score</div>
+                                    <div class="text-2xl font-bold text-purple-600">75%</div>
+                                </div>
+                                <div class="w-16 h-16 relative">
+                                    <svg class="progress-ring" width="64" height="64">
+                                        <circle
+                                            class="progress-ring-circle"
+                                            stroke="#e2e8f0"
+                                            stroke-width="8"
+                                            fill="transparent"
+                                            r="24"
+                                            cx="32"
+                                            cy="32"
+                                        />
+                                        <circle
+                                            class="progress-ring-circle"
+                                            stroke="#a855f7"
+                                            stroke-width="8"
+                                            fill="transparent"
+                                            r="24"
+                                            cx="32"
+                                            cy="32"
+                                            stroke-dasharray="150.8"
+                                            stroke-dashoffset="37.7"
+                                        />
+                                    </svg>
+                                    <div class="absolute inset-0 flex items-center justify-center font-bold text-purple-600">75%</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Score Components -->
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-white rounded-xl shadow p-3">
+                                    <div class="text-sm text-gray-500">ATS Score</div>
+                                    <div class="text-xl font-bold text-yellow-600">68%</div>
+                                </div>
+                                <div class="bg-white rounded-xl shadow p-3">
+                                    <div class="text-sm text-gray-500">Keyword Match</div>
+                                    <div class="text-xl font-bold text-green-600">82%</div>
+                                </div>
+                                <div class="bg-white rounded-xl shadow p-3">
+                                    <div class="text-sm text-gray-500">Format</div>
+                                    <div class="text-xl font-bold text-green-600">85%</div>
+                                </div>
+                                <div class="bg-white rounded-xl shadow p-3">
+                                    <div class="text-sm text-gray-500">Content</div>
+                                    <div class="text-xl font-bold text-yellow-600">65%</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Critical Improvements -->
+                            <div class="bg-white rounded-xl shadow p-4">
+                                <h3 class="text-base font-semibold mb-3">Critical Improvements</h3>
+                                <div class="space-y-3">
+                                    <div class="p-3 rounded-lg bg-red-50 border-l-4 border-red-500">
+                                        <div class="font-medium text-red-800">Missing key achievements</div>
+                                        <div class="text-sm text-red-600">Add quantifiable results to your work experience</div>
+                                    </div>
+                                    <div class="p-3 rounded-lg bg-yellow-50 border-l-4 border-yellow-500">
+                                        <div class="font-medium text-yellow-800">Improve ATS compatibility</div>
+                                        <div class="text-sm text-yellow-600">Use standard section headings for better parsing</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Missing Keywords -->
+                            <div class="bg-white rounded-xl shadow p-4">
+                                <h3 class="text-base font-semibold mb-3">Missing Keywords</h3>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">REST API</span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Docker</span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">CI/CD</span>
+                                    <span class="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs">Agile</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Side: Text Content -->
+            <div class="flex flex-col justify-center p-6 order-1 md:order-2">
+                <h2 class="text-3xl md:text-5xl font-bold mb-6 gradient-text">Resume Analytics</h2>
+                
+                <p class="text-lg md:text-xl text-gray-200 mb-8">
+                    Our AI-powered Resume Analytics provides detailed insights and improvements to optimize your resume 
+                    for Applicant Tracking Systems (ATS) and hiring managers.
+                </p>
+                
+                <div class="space-y-6">
+                    <div class="feature-box p-4 flex items-start">
+                        <div class="text-pink-400 text-2xl mr-3">🎯</div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">ATS Optimization</h3>
+                            <p class="text-gray-300">Get scored on ATS compatibility and receive targeted improvements.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-box p-4 flex items-start">
+                        <div class="text-purple-400 text-2xl mr-3">📊</div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Detailed Scoring</h3>
+                            <p class="text-gray-300">Comprehensive analysis across format, content, and keyword metrics.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-box p-4 flex items-start">
+                        <div class="text-blue-400 text-2xl mr-3">💡</div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-1">Actionable Improvements</h3>
+                            <p class="text-gray-300">Specific recommendations to enhance your resume and boost job application success.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Page Number and Navigation -->
+        <div class="absolute bottom-4 w-full flex justify-between px-4">
+            <a href="presentation2.html" class="text-white/60 hover:text-white text-sm">← Previous</a>
+            <div class="text-white/40 text-sm">Presentation 3/5</div>
+            <a href="presentation4.html" class="text-white/60 hover:text-white text-sm">Next →</a>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credolay - Presentation 5</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #1e3a8a, #1e40af, #1e3a8a);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .bg-overlay {
+            background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #10b981, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .bg-glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+        }
+        .roadmap-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-50%);
+        }
+        .roadmap-item {
+            position: relative;
+            z-index: 2;
+        }
+        .roadmap-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header fixed top-0 left-0 right-0 z-50 py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="index.html" class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Credolay</a>
+                <nav class="hidden md:flex ml-8">
+                    <a href="presentation1.html" class="text-white/60 hover:text-white mx-2 text-sm">1: Intro</a>
+                    <a href="presentation2.html" class="text-white/60 hover:text-white mx-2 text-sm">2: AI Assistant</a>
+                    <a href="presentation3.html" class="text-white/60 hover:text-white mx-2 text-sm">3: Resume Analytics</a>
+                    <a href="presentation4.html" class="text-white/60 hover:text-white mx-2 text-sm">4: Market</a>
+                    <a href="presentation5.html" class="text-white mx-2 text-sm font-medium">5: Strategy</a>
+                </nav>
+            </div>
+            <div class="text-xl font-semibold text-white/90">Innovation Visa Application</div>
+        </div>
+    </header>
+
+    <div class="relative w-full h-screen p-8 flex flex-col items-center justify-center bg-overlay">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 overflow-hidden opacity-20">
+            <div class="absolute top-10 right-10 w-64 h-64 bg-green-500 rounded-full filter blur-3xl"></div>
+            <div class="absolute bottom-10 left-10 w-64 h-64 bg-blue-500 rounded-full filter blur-3xl"></div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="relative z-10 max-w-6xl mx-auto mb-8">
+            <h2 class="text-3xl md:text-6xl font-bold mb-6 gradient-text text-center">Business Strategy</h2>
+            
+            <!-- Two Column Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Left Column: Business Model -->
+                <div>
+                    <div class="bg-glass p-6 rounded-2xl mb-8">
+                        <h3 class="text-2xl font-bold mb-4">Business Model</h3>
+                        <div class="space-y-6">
+                            <div class="bg-white/10 p-4 rounded-xl">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 rounded-full flex items-center justify-center bg-emerald-500/20 mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-emerald-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold">Freemium SaaS Model</h4>
+                                </div>
+                                <p class="text-gray-300 ml-13">
+                                    Basic features free, premium features require subscription. Tiered pricing based on access level and usage.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-white/10 p-4 rounded-xl">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 rounded-full flex items-center justify-center bg-blue-500/20 mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold">B2B Enterprise Solutions</h4>
+                                </div>
+                                <p class="text-gray-300 ml-13">
+                                    Custom solutions for recruiters and corporate HR teams with advanced analytics and white-labeling options.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-white/10 p-4 rounded-xl">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-10 h-10 rounded-full flex items-center justify-center bg-indigo-500/20 mr-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5" />
+                                        </svg>
+                                    </div>
+                                    <h4 class="text-lg font-semibold">API & Integration Partnerships</h4>
+                                </div>
+                                <p class="text-gray-300 ml-13">
+                                    Licensing our AI technology to job boards, educational platforms, and HR software providers.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Revenue Projections -->
+                    <div class="bg-glass p-6 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-4">Revenue Projections</h3>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-white/10 p-4 rounded-xl text-center">
+                                    <div class="text-sm text-gray-300 mb-1">Year 1</div>
+                                    <div class="text-2xl font-bold text-blue-300">$2.4M</div>
+                                </div>
+                                <div class="bg-white/10 p-4 rounded-xl text-center">
+                                    <div class="text-sm text-gray-300 mb-1">Year 2</div>
+                                    <div class="text-2xl font-bold text-blue-300">$6.8M</div>
+                                </div>
+                                <div class="bg-white/10 p-4 rounded-xl text-center">
+                                    <div class="text-sm text-gray-300 mb-1">Year 3</div>
+                                    <div class="text-2xl font-bold text-green-300">$14.2M</div>
+                                </div>
+                                <div class="bg-white/10 p-4 rounded-xl text-center">
+                                    <div class="text-sm text-gray-300 mb-1">Year 5</div>
+                                    <div class="text-2xl font-bold text-green-300">$31.6M</div>
+                                </div>
+                            </div>
+                            <div class="bg-white/10 p-4 rounded-xl">
+                                <div class="flex justify-between items-center mb-1">
+                                    <div class="text-sm text-gray-300">Projected CAGR</div>
+                                    <div class="text-lg font-bold text-green-300">67.5%</div>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+                                    <div class="bg-gradient-to-r from-blue-500 to-green-500 h-2 rounded-full" style="width: 67.5%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column: Roadmap & Expansion -->
+                <div>
+                    <div class="bg-glass p-6 rounded-2xl mb-8">
+                        <h3 class="text-2xl font-bold mb-6">Product Roadmap</h3>
+                        <div class="relative py-8">
+                            <!-- Connecting Line -->
+                            <div class="roadmap-line"></div>
+                            
+                            <!-- Roadmap Items -->
+                            <div class="grid grid-cols-4 gap-2 relative">
+                                <!-- Q2 2024 -->
+                                <div class="roadmap-item px-2">
+                                    <div class="roadmap-dot bg-blue-500"></div>
+                                    <div class="text-center mb-12">
+                                        <div class="bg-blue-500/20 p-2 rounded-lg mb-2">
+                                            <div class="text-sm font-medium text-blue-300">Q2 2024</div>
+                                        </div>
+                                        <div class="text-xs text-gray-300">MVP Launch</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Q4 2024 -->
+                                <div class="roadmap-item px-2">
+                                    <div class="roadmap-dot bg-indigo-500"></div>
+                                    <div class="text-center mt-12">
+                                        <div class="bg-indigo-500/20 p-2 rounded-lg mb-2">
+                                            <div class="text-sm font-medium text-indigo-300">Q4 2024</div>
+                                        </div>
+                                        <div class="text-xs text-gray-300">B2B Integration</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Q2 2025 -->
+                                <div class="roadmap-item px-2">
+                                    <div class="roadmap-dot bg-purple-500"></div>
+                                    <div class="text-center mb-12">
+                                        <div class="bg-purple-500/20 p-2 rounded-lg mb-2">
+                                            <div class="text-sm font-medium text-purple-300">Q2 2025</div>
+                                        </div>
+                                        <div class="text-xs text-gray-300">Global Expansion</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Q1 2026 -->
+                                <div class="roadmap-item px-2">
+                                    <div class="roadmap-dot bg-green-500"></div>
+                                    <div class="text-center mt-12">
+                                        <div class="bg-green-500/20 p-2 rounded-lg mb-2">
+                                            <div class="text-sm font-medium text-green-300">Q1 2026</div>
+                                        </div>
+                                        <div class="text-xs text-gray-300">AI Ecosystem</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Expansion Strategy -->
+                    <div class="bg-glass p-6 rounded-2xl">
+                        <h3 class="text-2xl font-bold mb-4">Expansion Strategy</h3>
+                        <div class="space-y-6">
+                            <div class="bg-white/10 p-4 rounded-xl">
+                                <h4 class="text-lg font-semibold mb-2">Geographic Expansion</h4>
+                                <p class="text-gray-300 mb-3">
+                                    Initial focus on Nigeria and UK markets, followed by expansion to other African countries and Europe.
+                                </p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="px-2 py-1 bg-blue-500/20 text-blue-300 rounded-full text-xs">Phase 1: Nigeria & UK</span>
+                                    <span class="px-2 py-1 bg-indigo-500/20 text-indigo-300 rounded-full text-xs">Phase 2: Africa</span>
+                                    <span class="px-2 py-1 bg-purple-500/20 text-purple-300 rounded-full text-xs">Phase 3: Europe</span>
+                                    <span class="px-2 py-1 bg-pink-500/20 text-pink-300 rounded-full text-xs">Phase 4: Global</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white/10 p-4 rounded-xl">
+                                <h4 class="text-lg font-semibold mb-2">Feature Expansion</h4>
+                                <div class="space-y-2">
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span class="text-gray-300">Industry-specific career pathways</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span class="text-gray-300">Personalized learning recommendations</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span class="text-gray-300">Advanced salary negotiation AI</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        <span class="text-gray-300">Virtual career fair platform</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Call to Action -->
+        <div class="relative z-10 text-center max-w-3xl mx-auto">
+            <h3 class="text-3xl font-bold mb-4">Join Our Innovation Journey</h3>
+            <p class="text-xl text-gray-300 mb-6">
+                Credolay is transforming how professionals navigate their careers through AI-powered innovation.
+            </p>
+            <div class="inline-block bg-gradient-to-r from-green-500 to-blue-600 text-white px-8 py-4 rounded-full text-xl font-bold shadow-lg">
+                Launching Q2 2024
+            </div>
+        </div>
+        
+        <!-- Page Number and Navigation -->
+        <div class="absolute bottom-4 w-full flex justify-between px-4">
+            <a href="presentation4.html" class="text-white/60 hover:text-white text-sm">← Previous</a>
+            <div class="text-white/40 text-sm">Presentation 5/5</div>
+            <a href="index.html" class="text-white/60 hover:text-white text-sm">Home →</a>
+        </div>
+    </div>
+</body>
+</html> 
