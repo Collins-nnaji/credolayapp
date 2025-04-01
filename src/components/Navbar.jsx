@@ -27,16 +27,16 @@ const Navbar = () => {
   const renderDesktopNav = () => (
     <div className="hidden lg:flex items-center space-x-4">
       <div className="relative group">
-        <button className="py-2 px-3 text-sm rounded-lg flex items-center gap-1 text-white hover:bg-white/10 transition duration-150">
+        <button className="py-2 px-3 text-sm rounded-lg flex items-center gap-1 text-gray-700 hover:bg-gray-100 transition duration-150">
           Slides <span className="h-4 w-4 opacity-70">▼</span>
         </button>
-        <div className="absolute left-0 mt-2 w-56 rounded-xl overflow-hidden shadow-lg bg-gray-800 border border-gray-700 transform scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-200 origin-top-left z-50">
+        <div className="absolute left-0 mt-2 w-56 rounded-xl overflow-hidden shadow-lg bg-white border border-gray-200 transform scale-0 group-hover:scale-100 opacity-0 group-hover:opacity-100 transition-all duration-200 origin-top-left z-50">
           <div className="py-2">
             {navigationItems.slice(1).map((item) => (
               <Link 
                 key={item.href} 
                 to={item.href}
-                className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700/50 hover:text-white transition duration-150"
+                className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition duration-150"
               >
                 {item.label}
               </Link>
@@ -45,16 +45,16 @@ const Navbar = () => {
         </div>
       </div>
       
-      <Link to="/" className="py-2 px-3 text-sm rounded-lg text-white hover:bg-white/10 transition duration-150">
+      <Link to="/" className="py-2 px-3 text-sm rounded-lg text-gray-700 hover:bg-gray-100 transition duration-150">
         Home
       </Link>
     </div>
   );
 
   const renderMobileNav = () => (
-    <div className={`lg:hidden fixed inset-0 bg-gray-900/95 backdrop-blur-sm z-50 transform ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-300 ease-in-out`}>
+    <div className={`lg:hidden fixed inset-0 bg-white/95 backdrop-blur-sm z-50 transform ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-300 ease-in-out`}>
       <div className="flex justify-end p-4">
-        <button onClick={() => setIsMobileMenuOpen(false)} className="text-white">
+        <button onClick={() => setIsMobileMenuOpen(false)} className="text-gray-700">
           <span className="h-6 w-6 block">✕</span>
         </button>
       </div>
@@ -64,7 +64,7 @@ const Navbar = () => {
             key={item.href} 
             to={item.href}
             onClick={() => setIsMobileMenuOpen(false)}
-            className="py-2 px-4 w-full text-center text-white text-lg font-medium hover:bg-white/10 rounded-lg transition duration-150"
+            className="py-2 px-4 w-full text-center text-gray-700 text-lg font-medium hover:bg-gray-100 rounded-lg transition duration-150"
           >
             {item.label}
           </Link>
@@ -77,27 +77,27 @@ const Navbar = () => {
     <motion.nav 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled 
-          ? 'bg-gray-900/90 backdrop-blur-lg py-3 shadow-lg shadow-black/20' 
+          ? 'bg-white/90 backdrop-blur-lg py-3 shadow-md border-b border-gray-200' 
           : 'bg-transparent py-5'
       }`}
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <motion.div
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            whileHover={{ scale: 1.03 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
             <Link to="/" className="flex items-center">
               <div className="h-8 w-8 relative mr-3">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg animate-float"></div>
-                <div className="absolute inset-1 bg-gray-900 rounded-md"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg"></div>
+                <div className="absolute inset-1 bg-white rounded-md"></div>
                 <div className="absolute inset-2 bg-gradient-to-tr from-blue-400 to-purple-500 rounded-sm"></div>
               </div>
-              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
+              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
                 Interactive Platform
               </span>
             </Link>
@@ -111,7 +111,7 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <div className="lg:hidden">
             <motion.button
-              className="text-white p-2 focus:outline-none rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+              className="text-gray-700 p-2 focus:outline-none rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               whileTap={{ scale: 0.95 }}
             >
