@@ -52,7 +52,7 @@ const PresentationHome = () => {
     },
     {
       number: '05',
-      title: 'Business Strategy',
+      title: 'Implementation Plan',
       description: 'Revenue model and expansion roadmap',
       path: '/presentation/5',
       icon: '💼',
